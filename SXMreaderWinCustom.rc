@@ -1,0 +1,142 @@
+/*	XOP-specific resources for SXMreader on Windows
+
+	This file is compiled by the resource compiler and creates XOP-specific
+	resources that IGOR looks for in an XOP module.
+*/
+
+#include "XOPResources.h"			// Defines XOP-specific symbols.
+
+/* no menu item */
+
+1100 XOPI							// XOPI - Describes general XOP properties to IGOR.
+BEGIN
+	XOP_VERSION,					// Version number of host XOP system.
+	DEV_SYS_CODE,					// Code for development system used to make XOP.
+	XOP_FEATURE_FLAGS,				// Tells Igor about XOP features
+	XOPI_RESERVED,					// Reserved - must be zero.
+	XOP_TOOLKIT_VERSION				// XOP Toolkit version.
+END
+
+1100 STR#
+BEGIN
+	"Wave is not a grid.\0",
+	"XFUNC3 XOP was called to execute an unknown function.\0",
+	"Input string is non-existent.\0",
+	"The number of points in both points is not matching.\0",
+	"\0" // NULL required to terminate the resource.
+END
+
+1100 XMN1
+BEGIN
+		100, // menuResID: Menu resource ID is 100.
+		1, // menuFlags: Show menu when Igor is launched.
+		
+		0, // 0 required to terminate the resource.
+END
+
+1100 XSM1 // Windows, in MenuXOP1WinCustom.rc.
+BEGIN
+		101, // subMenuResID: Add submenu with resource ID 101
+		100, // mainMenuResID: to menu with resource ID 100
+		1, // mainMenuItemNum: to item 1 of menu
+		
+		0, // 0 required to terminate the resource
+END
+
+1100 XMI1 // Windows, in MenuXOP1WinCustom.rc.
+BEGIN
+
+	0, // 0 required to terminate the resource.
+END
+
+1100 XOPF							// Describes functions added by XOP to IGOR.
+BEGIN
+	"readSXMFile\0"
+	F_IO,
+		WAVE_TYPE,
+		HSTRING_TYPE,
+		HSTRING_TYPE,
+		0,
+		
+	"readDATFile\0"
+	F_IO,
+		WAVE_TYPE,
+		HSTRING_TYPE,
+		HSTRING_TYPE,
+		0,
+		
+	"readDATFolder\0"
+	F_IO,
+		WAVE_TYPE,
+		HSTRING_TYPE,
+		HSTRING_TYPE,
+		0,
+		
+	"plotDemodX\0"
+	F_IO,
+		WAVE_TYPE,
+		HSTRING_TYPE,
+		HSTRING_TYPE,
+		0,
+		
+	"plotDemodY\0"
+	F_IO,
+		WAVE_TYPE,
+		HSTRING_TYPE,
+		HSTRING_TYPE,
+		0,
+		
+	"dynesFit\0"
+	F_IO,
+		WAVE_TYPE,
+		WAVE_TYPE,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		0,
+		
+	"findpeaks\0"
+	F_IO,
+		WAVE_TYPE,
+		WAVE_TYPE,
+		0,
+		
+	"dynesFitGrid\0"
+	F_IO,
+		WAVE_TYPE,
+		WAVE_TYPE,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		NT_FP64,
+		0,
+		
+	"removeBackground\0"
+	F_IO,
+		WAVE_TYPE,
+		WAVE_TYPE,
+		WAVE_TYPE,
+		WAVE_TYPE,
+		WAVE_TYPE,
+		0,
+		
+	"read3ds\0"
+	F_IO,
+		WAVE_TYPE,
+		HSTRING_TYPE,
+		HSTRING_TYPE,
+		0,
+	// More function descriptions can appear here.
+	
+	0,								// NOTE: 0 required to terminate the resource.
+END
+
