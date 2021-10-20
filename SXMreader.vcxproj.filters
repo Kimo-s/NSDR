@@ -32,10 +32,13 @@
     <ClCompile Include="..\Dynes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\readFunctions.cpp">
+    <ClCompile Include="..\findPeak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\findPeak.cpp">
+    <ClCompile Include="..\utilityFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\readFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

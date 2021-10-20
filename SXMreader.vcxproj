@@ -36,7 +36,7 @@
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
@@ -293,10 +293,9 @@
   <ItemGroup>
     <ClCompile Include="..\Dynes.cpp" />
     <ClCompile Include="..\findPeak.cpp" />
-    <ClCompile Include="..\readFunctions.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\readFunctions.cpp" />
     <ClCompile Include="..\SXMreader.cpp" />
+    <ClCompile Include="..\utilityFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\SXMreader.rc">
