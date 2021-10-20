@@ -26,20 +26,25 @@
     <Library Include="..\..\XOPSupport\VC\XOPSupport64.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\SXMreader.cpp">
+    <ClCompile Include="src\Dynes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Dynes.cpp">
+    <ClCompile Include="src\findPeak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\findPeak.cpp">
+    <ClCompile Include="src\readFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\utilityFunctions.cpp">
+    <ClCompile Include="src\SXMreader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\readFunctions.cpp">
+    <ClCompile Include="src\utilityFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\SXMreader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

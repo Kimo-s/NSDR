@@ -291,11 +291,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Dynes.cpp" />
-    <ClCompile Include="..\findPeak.cpp" />
-    <ClCompile Include="..\readFunctions.cpp" />
-    <ClCompile Include="..\SXMreader.cpp" />
-    <ClCompile Include="..\utilityFunctions.cpp" />
+    <ClCompile Include="src\Dynes.cpp" />
+    <ClCompile Include="src\findPeak.cpp" />
+    <ClCompile Include="src\readFunctions.cpp" />
+    <ClCompile Include="src\SXMreader.cpp" />
+    <ClCompile Include="src\utilityFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\SXMreader.rc">
@@ -325,6 +325,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\SXMreader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
