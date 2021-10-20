@@ -17,10 +17,10 @@ readSXMFile(readSXMFileParams * p)
 	char filepath[MAX_OBJ_NAME + 1];
 	int width;
 	int height;
-	double widthRange;
-	double heightRange;
-	double widthOffset;
-	double heightOffset;
+	float widthRange;
+	float heightRange;
+	float widthOffset;
+	float heightOffset;
 	int scan_direction = 0; // 0 for down and 1 for up
 	FILE* fp;
 	int err;
@@ -66,8 +66,8 @@ readSXMFile(readSXMFileParams * p)
 		else if (strcmp(buff, ":SCAN_OFFSET:") == 0) {
 			fscanf_s(fp, "%E", &widthOffset, sizeof(widthOffset));
 			fscanf_s(fp, "%E", &heightOffset, sizeof(heightOffset));
-			sprintf(message, "Widthoffset = %e, heightoffset = %e\n", widthOffset, heightOffset);
-			XOPNotice(message);
+			/*sprintf(message, "Widthoffset = %e, heightoffset = %e\n", widthOffset, heightOffset);
+			XOPNotice(message);*/
 			found_headers++;
 		}
 		else if (strcmp(buff, ":DATA_INFO:") == 0) {
@@ -91,8 +91,8 @@ readSXMFile(readSXMFileParams * p)
 
 				channelNames.push_back(std::string(token));
 
-				sprintf(message, "Found Name: %s, Number of copies: %d\n", channelNames.back().c_str(), channelDirections.back());
-				XOPNotice(message);
+				/*sprintf(message, "Found Name: %s, Number of copies: %d\n", channelNames.back().c_str(), channelDirections.back());
+				XOPNotice(message);*/
 				fgets(buff, sizeof(buff), fp);
 			}
 			found_headers++;
@@ -134,9 +134,13 @@ readSXMFile(readSXMFileParams * p)
 	int q = 0;
 	char name[MAX_OBJ_NAME + 1];
 	for (int i = 0; i < totalChannelDirections; i++) {
-		
+
+		bool flip = true;
 		if (channelDirections.at(q) > 0) {
 			sprintf(name, "%s__%s__%d", waveName, channelNames.at(q).c_str(), channelDirections.at(q));
+			if (channelDirections.at(q) == 2) {
+				flip = false;
+			}
 			channelDirections.at(q) = channelDirections.at(q) - 1;
 		}
 		else {
@@ -151,33 +155,50 @@ readSXMFile(readSXMFileParams * p)
 			return result;
 		}
 
-		float* ptr = (float*)WaveData(test);
+		/*float* ptr = (float*)WaveData(test);*/
 		float ex;
 		IndexInt indices[MAX_DIMENSIONS];
 		double value[2];
 		if (scan_direction == 0) {
-			for (int i = 0; i < width; i++) {
-				for (int y = 0; y < height; y++) {
-					fread((void*)(&ex), sizeof(float), 1, fp);
-					indices[0] = i;
-					indices[1] = y;
-					value[0] = ReverseFloat(ex);
-					MDSetNumericWavePointValue(test, indices, value);
+			if (flip) {
+				for (int i = 0; i < height; i++) {
+					for (int y = 0; y < width; y++) {
+						fread((void*)(&ex), sizeof(float), 1, fp);
+						indices[0] = width - 1 - y;
+						indices[1] = i;
+						value[0] = ReverseFloat(ex);
+						MDSetNumericWavePointValue(test, indices, value);
+					}
+					//*(ptr + i) = ReverseFloat(ex);
 				}
-				//*(ptr + i) = ReverseFloat(ex);
+			}
+			else {
+				for (int i = 0; i < height; i++) {
+					for (int y = 0; y < width; y++) {
+						fread((void*)(&ex), sizeof(float), 1, fp);
+						indices[0] = y;
+						indices[1] = i;
+						value[0] = ReverseFloat(ex);
+						MDSetNumericWavePointValue(test, indices, value);
+					}
+					//*(ptr + i) = ReverseFloat(ex);
+				}
 			}
 		}
 		else {
-			for (int y = height - 1; y >= 0; y--) {
-				for (int x = 0; x < width; x++) {
+			for (int i = 0; i < height; i++) {
+				for (int y = 0; y < width; y++) {
 					fread((void*)(&ex), sizeof(float), 1, fp);
-					*(ptr + (x + y * width)) = ReverseFloat(ex);
+					indices[0] = width - 1 - y;
+					indices[1] = i;
+					value[0] = ReverseFloat(ex);
+					MDSetNumericWavePointValue(test, indices, value);
 				}
 			}
 		}
 
-		sprintf(message, "Widthoffset = %e, heightoffset = %e, heightRange = %e, widthRange = %e\n", widthOffset, heightOffset, heightRange, widthRange);
-		XOPNotice(message);
+		/*sprintf(message, "Widthoffset = %e, heightoffset = %e, heightRange = %e, widthRange = %e\n", widthOffset, heightOffset, heightRange, widthRange);
+		XOPNotice(message);*/
 
 		double offset = widthOffset - widthRange / 2;
 		double delta = widthRange/(width-1);
