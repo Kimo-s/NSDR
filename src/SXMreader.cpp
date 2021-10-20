@@ -17,10 +17,10 @@ readSXMFile(readSXMFileParams * p)
 	char filepath[MAX_OBJ_NAME + 1];
 	int width;
 	int height;
-	float widthRange;
-	float heightRange;
-	float widthOffset;
-	float heightOffset;
+	double widthRange;
+	double heightRange;
+	double widthOffset;
+	double heightOffset;
 	int scan_direction = 0; // 0 for down and 1 for up
 	FILE* fp;
 	int err;
