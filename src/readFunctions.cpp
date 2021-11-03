@@ -417,11 +417,23 @@ read3ds(readSXMFileParams * p) {
 			return result;
 		}
 		offset = 0;
-		delta = sqrt(pow(parametersLast[2] - parametersFirst[2], 2) + pow(parametersLast[3] - parametersFirst[3], 2)) / (width-1);
+		if (height > 1) {
+			offset = parametersFirst[2];
+			delta = parametersLast[2] - parametersFirst[2] / (width - 1);
+		}
+		else {
+			delta = sqrt(pow(parametersLast[2] - parametersFirst[2], 2) + pow(parametersLast[3] - parametersFirst[3], 2)) / (width - 1);
+		}
 		if (err = MDSetWaveScaling(waveptrs[i], ROWS, &delta, &offset)) {
 			return err;
 		}
-		delta = 1;
+		if (height > 1) {
+			offset = parametersFirst[3];
+			delta = parametersLast[3] - parametersFirst[3] / (height - 1);
+		}
+		else {
+			delta = 1;
+		}
 		if (err = MDSetWaveScaling(waveptrs[i], COLUMNS, &delta, &offset)) {
 			return err;
 		}
@@ -430,15 +442,19 @@ read3ds(readSXMFileParams * p) {
 		if (err = MDSetWaveScaling(waveptrs[i], LAYERS, &delta, &offset)) {
 			return err;
 		}
+		MDSetWaveUnits(waveptrs[i], 0, "m");
+		MDSetWaveUnits(waveptrs[i], 1, "m");
+		MDSetWaveUnits(waveptrs[i], 2, "V");
 	}
 	p->result = waveptrs[0];
+
 
 
 	IndexInt indices[MAX_DIMENSIONS];
 	double value[2];
 	size_t waveNum = 0;
-	for (int x = 0; x < width; x++) {
-		for (int y = 0; y < height; y++) {
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
 			indices[ROWS] = x;
 			indices[COLUMNS] = y;
 				for (int w = 0; w < channels.size() - 1; w++) {
