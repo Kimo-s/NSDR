@@ -1,13 +1,6 @@
 ﻿#include "stdio.h"
 #include "stdlib.h"
-#include "gsl/gsl_integration.h"
-#include "gsl/gsl_randist.h"
-#include "gsl/gsl_vector.h"
-#include "gsl/gsl_blas.h"
-#include "gsl/gsl_multifit_nlinear.h"
-#include "gsl/gsl_complex.h"
-#include "gsl/gsl_complex_math.h"
-#include "gsl/gsl_errno.h"
+
 
 /*
 	SXMreader.h -- equates for SXMreader XOP
@@ -29,14 +22,8 @@ typedef struct readSXMFileParams readSXMFileParams;
 struct DynesFitParams {
 	double temperature;
 	double integralLimit;
-	double initialV;
-	double initialC;
-	double initialB;
-	double initialA;
-	double initialDel;
-	double initialGamma;
 	waveHndl wave;					// wave handle
-	waveHndl result;					// wave result
+	waveHndl result;				// wave result
 };
 typedef struct DynesFitParams dynesFitParams;
 #pragma pack()		// Reset structure alignment to default.

@@ -123,6 +123,31 @@ readSXMFile(readSXMFileParams * p)
 	if (GetCurrentDataFolder(&parentFolder)) {
 		return CANT_FIND_FOLDER;
 	}
+
+	// Check if name exists already for the folder and rename accordingly
+	int n = 0;
+	while (1) {
+		if (n == 0) {
+			sprintf(buff, "Variable temp = DataFolderExists(\"%s\")", waveName);
+		}
+		else {
+			sprintf(buff, "Variable temp = DataFolderExists(\"%s (%d)\")", waveName, n);
+		}
+		XOPCommand2(buff, 0, 0);
+		double real;
+		double img;    //ignore
+		FetchNumVar("temp", &real, &img);
+		XOPCommand2("KillVariables/Z temp", 0, 0);
+		if (real == 0) {
+			if (n == 0) {
+				break;
+			}
+			sprintf(waveName, "%s (%d)", waveName, n);
+			break;
+		}
+		n++;
+	}
+
 	if (NewDataFolder(parentFolder, waveName, &folder) != 0) {
 		return CANT_FIND_FOLDER;
 	}

@@ -13,7 +13,7 @@
 #define ERR(i) sqrt(gsl_matrix_get(covar, i, i))
 
 
-static double integralLim = 0;
+static double integralLim = 30;
 static double T = 1.5;
 
 double F2(double t, void* params) {
@@ -135,7 +135,7 @@ dynesFit(dynesFitParams * p) {
     gsl_multifit_nlinear_workspace* w;
 
     // initial guess of the parameters 
-    double x_init[pr] = { p->initialGamma, p->initialDel , p->initialA , p->initialB , p->initialC , p->initialV};
+    double x_init[pr] = {1.0, 1.0 , 1.0 , 1.0 , 1.0 , 1.0 };
     gsl_vector_view x = gsl_vector_view_array(x_init, pr);
 
     //data structure initilziation
@@ -242,7 +242,7 @@ dynesFit(dynesFitParams * p) {
     char name[MAX_OBJ_NAME + 1];
     WaveName(p->wave, name);
     sprintf(message, "%s_DyneFitPlot", name);
-    if (result = MDMakeWave(&fitplot, message, NULL, dimensionSizes, NT_FP32, 1)) {
+    if (result = MDMakeWave(&fitplot, message, NULL, dimensionSizes, NT_FP64, 1)) {
         return result;
     }
     
@@ -284,7 +284,7 @@ dynesFit(dynesFitParams * p) {
 
     WaveName(p->wave, name);
     sprintf(message, "%s_DyneFitParameters", name);
-    if (result = MDMakeWave(&p->result, message, NULL, dimensionSizes2, NT_FP32, 1)) {
+    if (result = MDMakeWave(&p->result, message, NULL, dimensionSizes2, NT_FP64, 1)) {
         return result;
     }
 
@@ -328,7 +328,9 @@ dynesFit(dynesFitParams * p) {
         double ti = x0 + dti * i;
         struct functionInput input = { Gamma, Del , V_0, ti };
         double Y = (C + B * (ti + V_0) + A * gsl_pow_2(ti + V_0)) * integrate_F2(input, &status);
-        waveptr[i] = (float)Y;
+        indices[0] = i;
+        value[0] = Y;
+        MDSetNumericWavePointValue(fitplot, indices, value);
     }
 
     gsl_multifit_nlinear_free(w);
@@ -471,7 +473,7 @@ dynesFitGrid(dynesFitParams* p) {
             char command[MAXCMDLEN + 1];
             sprintf(command, "root:\'%s_DynesPlots\':\'%s\'", name, message);
             //XOPNotice(command);
-            sprintf(message, "dynesFit(%s, %f, %f, %f, %f, %f, %f, %f, %f)", command, p->initialGamma, p->initialDel, p->initialA, p->initialB, p->initialC, p->initialV, p->integralLimit, p->temperature);
+            sprintf(message, "dynesFit(%s, %f, %f, %f, %f, %f, %f, %f, %f)", command, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, p->integralLimit, p->temperature);
             XOPCommand2(message, 0, 1);
             sprintf(message, "Fit of x=%d,y=%d done.\n", x, y);
             XOPNotice(message);

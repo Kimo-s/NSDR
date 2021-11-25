@@ -125,9 +125,6 @@ readDATFile(readSXMFileParams * p) {
 	}
 
 
-
-
-
 	int result;
 	char waveName[MAX_OBJ_NAME + 1];
 	CountInt dimensionSizes[MAX_DIMENSIONS + 1];
@@ -135,7 +132,6 @@ readDATFile(readSXMFileParams * p) {
 	double offset = startOfBias;
 	double delta = (endOfBias - startOfBias) / (points - 1);
 	DataFolderHandle folder;
-	DataFolderHandle checker;
 	DataFolderHandle parentFolder;
 
 	MemClear(dimensionSizes, sizeof(dimensionSizes));
@@ -144,25 +140,41 @@ readDATFile(readSXMFileParams * p) {
 	if (GetCurrentDataFolder(&parentFolder)) {
 		return CANT_FIND_FOLDER;
 	}
-	/*if (GetNamedDataFolder(parentFolder, waveName, &checker) != 0) {
-		return CANT_FIND_FOLDER;
-	}*/
 
-	//if (checker == NULL) {
+	// Check if name exists already for the folder and rename accordingly
+	int n = 0;
+	while (1) {
+		if (n == 0) {
+			sprintf(buff, "Variable temp = DataFolderExists(\"%s\")", waveName);
+		}
+		else {
+			sprintf(buff, "Variable temp = DataFolderExists(\"%s (%d)\")", waveName, n);
+		}
+		XOPCommand2(buff, 0, 0);
+		double real;
+		double img;    //ignore
+		FetchNumVar("temp", &real, &img);
+		XOPCommand2("KillVariables/Z temp", 0, 0);
+		if (real == 0) {
+			if (n == 0) {
+				break;
+			}
+			sprintf(waveName, "%s (%d)", waveName, n);
+			break;
+		}
+		n++;
+	}
+
+
 	if (NewDataFolder(parentFolder, waveName, &folder) != 0) {
 		return CANT_FIND_FOLDER;
 	}
-	//}
-	/*else {
-		return CANT_FIND_FOLDER;
-	}*/
-
 
 
 	char name[MAX_OBJ_NAME + 1];
 	for (int i = 0; i < graphs - 1; i++) {
 		waveHndl temp;
-		sprintf(name, "%s", labels.at(i).c_str());
+		sprintf(name, "%s_%s", waveName, labels.at(i).c_str());
 		if (result = MDMakeWave(&temp, name, folder, dimensionSizes, NT_FP32, 1)) {
 			return result;
 		}
@@ -359,6 +371,31 @@ read3ds(readSXMFileParams * p) {
 	if (GetCurrentDataFolder(&parentFolder)) {
 		return CANT_FIND_FOLDER;
 	}
+
+	// Check if name exists already for the folder and rename accordingly
+	int n = 0;
+	while (1) {
+		if (n == 0) {
+			sprintf(buff, "Variable temp = DataFolderExists(\"%s\")", waveName);
+		}
+		else {
+			sprintf(buff, "Variable temp = DataFolderExists(\"%s (%d)\")", waveName, n);
+		}
+		XOPCommand2(buff, 0, 0);
+		double real;
+		double img;    //ignore
+		FetchNumVar("temp", &real, &img);
+		XOPCommand2("KillVariables/Z temp", 0, 0);
+		if (real == 0) {
+			if (n == 0) {
+				break;
+			}
+			sprintf(waveName, "%s (%d)", waveName, n);
+			break;
+		}
+		n++;
+	}
+
 	if (NewDataFolder(parentFolder, waveName, &folder) != 0) {
 		return CANT_FIND_FOLDER;
 	}
