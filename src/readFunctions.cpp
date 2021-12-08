@@ -435,21 +435,16 @@ read3ds(readSXMFileParams * p) {
 		}
 	}
 
-
-	/*sprintf(buff, "%d    %d    %d\n", data.size(), data[0].size(), points);
-	XOPNotice(buff);
-	for (int i = 0; i < data.size(); i++) {
-		for (int s = 0; s < data[0].size(); s++) {
-			sprintf(buff, "Value at (%d,%d) = %E\n", i, s, data[i][s]);
-			XOPNotice(buff);
-		}
-	}*/
-
 	double offset;
 	double delta;
+	char fileName[MAX_OBJ_NAME + 1];
+	strcpy(fileName, waveName);
 	std::vector <waveHndl> waveptrs (channels.size()-1);
 	for (size_t i = 0; i < channels.size() - 1; i++) {
-		sprintf(waveName, "%s", channels[i + 1].c_str());
+		sprintf(waveName, "%s_%s", fileName, channels[i + 1].c_str());
+		if (strlen(waveName) >= 255) {
+			sprintf(waveName, "%s", channels[i + 1].c_str());
+		}
 		if (result = MDMakeWave(&waveptrs[i], waveName, folder, dimensionSizes, NT_FP32, 1)) {
 			return result;
 		}

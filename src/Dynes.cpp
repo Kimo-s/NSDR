@@ -473,7 +473,7 @@ dynesFitGrid(dynesFitParams* p) {
             char command[MAXCMDLEN + 1];
             sprintf(command, "root:\'%s_DynesPlots\':\'%s\'", name, message);
             //XOPNotice(command);
-            sprintf(message, "dynesFit(%s, %f, %f, %f, %f, %f, %f, %f, %f)", command, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, p->integralLimit, p->temperature);
+            sprintf(message, "dynesFit(%s, %f, %f)", command, p->integralLimit, p->temperature);
             XOPCommand2(message, 0, 1);
             sprintf(message, "Fit of x=%d,y=%d done.\n", x, y);
             XOPNotice(message);

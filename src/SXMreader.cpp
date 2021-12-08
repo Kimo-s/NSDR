@@ -179,6 +179,8 @@ readSXMFile(readSXMFileParams * p)
 		if (result = MDMakeWave(&test, name, folder, dimensionSizes, NT_FP32, 1)) {
 			return result;
 		}
+		MDSetWaveUnits(test, 0, "m");
+		MDSetWaveUnits(test, 1, "m");
 
 		/*float* ptr = (float*)WaveData(test);*/
 		float ex;
@@ -194,7 +196,6 @@ readSXMFile(readSXMFileParams * p)
 						value[0] = ReverseFloat(ex);
 						MDSetNumericWavePointValue(test, indices, value);
 					}
-					//*(ptr + i) = ReverseFloat(ex);
 				}
 			}
 			else {
@@ -206,18 +207,30 @@ readSXMFile(readSXMFileParams * p)
 						value[0] = ReverseFloat(ex);
 						MDSetNumericWavePointValue(test, indices, value);
 					}
-					//*(ptr + i) = ReverseFloat(ex);
 				}
 			}
 		}
 		else {
-			for (int i = 0; i < height; i++) {
-				for (int y = 0; y < width; y++) {
-					fread((void*)(&ex), sizeof(float), 1, fp);
-					indices[0] = width - 1 - y;
-					indices[1] = i;
-					value[0] = ReverseFloat(ex);
-					MDSetNumericWavePointValue(test, indices, value);
+			if (flip) {
+				for (int i = 0; i < height; i++) {
+					for (int y = 0; y < width; y++) {
+						fread((void*)(&ex), sizeof(float), 1, fp);
+						indices[0] = width - 1 - y;
+						indices[1] = height - 1 - i;
+						value[0] = ReverseFloat(ex);
+						MDSetNumericWavePointValue(test, indices, value);
+					}
+				}
+			}
+			else {
+				for (int i = 0; i < height; i++) {
+					for (int y = 0; y < width; y++) {
+						fread((void*)(&ex), sizeof(float), 1, fp);
+						indices[0] = y;
+						indices[1] = height - 1 - i;
+						value[0] = ReverseFloat(ex);
+						MDSetNumericWavePointValue(test, indices, value);
+					}
 				}
 			}
 		}
